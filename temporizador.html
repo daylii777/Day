@@ -48,6 +48,42 @@
       opacity: 0.8;
     }
 
+    /* Contenedor de la marquesina superior en la zona marcada */
+    .marquesina-cancion {
+      position: absolute;
+      top: 20px;
+      left: 60px;
+      right: 20px;
+      height: 25px;
+      overflow: hidden;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+    }
+
+    .info-cancion {
+      font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Roboto Condensed', sans-serif;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+      white-space: nowrap;
+      display: inline-block;
+      position: absolute;
+      will-change: transform;
+      animation: desplazarTexto 12s linear infinite;
+      animation-play-state: paused; /* Pausado hasta que inicie la música */
+    }
+
+    @keyframes desplazarTexto {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
     #btnStart {
       position: fixed;
       top: 50%;
@@ -181,7 +217,7 @@
     }
 
     .definicion-diccionario {
-      margin-top: 20px;
+      margin-top: 10px;
       text-align: left;
       width: 100%;
       padding: 0 10px;
@@ -226,6 +262,11 @@
 <body>
 
   <a href="Cartas.html" class="btn-regresar" title="Volver a Cartas">‹</a>
+
+  <!-- Zona superior en marquesina con el título exacto -->
+  <div class="marquesina-cancion">
+    <div id="infoCancion" class="info-cancion"></div>
+  </div>
 
   <button id="btnStart" onclick="iniciarExperiencia()">START</button>
 
@@ -274,34 +315,44 @@
   </div>
 
   <script>
-    const canciones = [
-      'audio/Song1.mp3',
-      'audio/Song2.mp3',
-      'audio/Song3.mp3',
-      'audio/Song4.mp3',
-      'audio/Song5.mp3',
-      'audio/Song6.mp3'
+    // Playlist con tus canciones y su relación exacta con cada archivo SongX
+    const playlist = [
+      { archivo: 'audio/Song1.mp3', titulo: 'Until I Found You', artista: 'Stephen Sanchez' },
+      { archivo: 'audio/Song2.mp3', titulo: 'Love of Your Life', artista: 'Red Hot Chili Peppers' },
+      { archivo: 'audio/Song3.mp3', titulo: 'Hey', artista: 'Red Hot Chili Peppers' },
+      { archivo: 'audio/Song4.mp3', titulo: 'Química Mayor', artista: 'Mon Laferte' },
+      { archivo: 'audio/Song5.mp3', titulo: 'Lovable', artista: 'Kim Jong Kook' },
+      { archivo: 'audio/Song6.mp3', titulo: 'Risk It All', artista: 'Bruno Mars' }
     ];
 
     let audioActual = null;
 
     function reproducirCancionAleatoria() {
-      const randomIndex = Math.floor(Math.random() * canciones.length);
-      const cancionSeleccionada = canciones[randomIndex];
+      // Elige un índice al azar entre 0 y 5
+      const randomIndex = Math.floor(Math.random() * playlist.length);
+      const cancionSeleccionada = playlist[randomIndex];
 
       if (audioActual) {
         audioActual.pause();
       }
 
-      audioActual = new Audio(cancionSeleccionada);
+      audioActual = new Audio(cancionSeleccionada.archivo);
       audioActual.volume = 0.6;
 
       audioActual.play().then(() => {
-        console.log("Música iniciada correctamente.");
+        console.log("Reproduciendo al azar:", cancionSeleccionada.titulo);
       }).catch(e => {
         console.log("Error al reproducir audio:", e);
       });
 
+      // Muestra exactamente el título y artista correspondientes a la canción elegida al azar
+      const infoElement = document.getElementById('infoCancion');
+      if (infoElement) {
+        infoElement.innerText = `♫ Reproduciendo: "${cancionSeleccionada.titulo}" — ${cancionSeleccionada.artista}`;
+        infoElement.style.animationPlayState = 'running';
+      }
+
+      // Cuando termine esta canción, vuelve a elegir otra al azar en bucle
       audioActual.onended = function() {
         reproducirCancionAleatoria();
       };
