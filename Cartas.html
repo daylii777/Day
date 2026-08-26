@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cartas para ti ❤️</title>
-  <link href="https://fonts.googleapis.com/css2?family=Italianno&family=Playfair+Display:ital@0;1&family=Roboto+Condensed:wght@400;600&family=Stoke:wght@400&family=Afacad+Flux:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <title>Cuenta Regresiva ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Stoke:wght@400&family=Roboto+Condensed:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -15,559 +15,443 @@
     }
 
     body {
-      background-color: #0d0d0d;
       color: #ffffff;
-      font-family: 'Roboto Condensed', sans-serif;
+      font-family: 'Afacad Flux', sans-serif;
       min-height: 100vh;
       min-height: 100lvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 60px 15px 30px 15px;
+      padding: 20px;
+      text-align: center;
       overflow-x: hidden;
       overflow-y: auto;
       position: relative;
     }
 
-    .boton-regresar {
-      position: fixed;
+    .btn-regresar {
+      position: absolute;
       top: 20px;
       left: 20px;
-      z-index: 10;
+      font-size: 2rem;
       color: #ffffff;
-      font-size: clamp(1.8rem, 5vw, 2.2rem);
       text-decoration: none;
-      font-family: 'Playfair Display', serif;
+      z-index: 10;
+      transition: transform 0.2s ease, opacity 0.2s ease;
       line-height: 1;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-regresar:hover {
+      transform: scale(1.15);
       opacity: 0.8;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
     }
 
-    .boton-regresar:hover {
-      opacity: 1;
-      transform: translateX(-3px);
-    }
-
-    .titulo {
-      font-family: 'Italianno', cursive;
-      font-size: clamp(2.8rem, 8vw, 4rem);
-      margin-bottom: clamp(60px, 12vh, 90px);
-      letter-spacing: 1px;
-      color: #f4efe6;
-      text-align: center;
-    }
-
-    .pila-container {
-      position: relative;
-      width: clamp(250px, 80vw, 290px);
-      height: clamp(280px, 90vw, 320px);
-      margin-bottom: 20px;
-    }
-
-    .carta {
+    /* Contenedor de la marquesina superior en la zona marcada */
+    .marquesina-cancion {
       position: absolute;
-      width: 100%;
-      height: 100%;
+      top: 20px;
+      left: 60px;
+      right: 20px;
+      height: 25px;
+      overflow: hidden;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+    }
+
+    .info-cancion {
+      font-size: clamp(0.75rem, 2.5vw, 0.85rem);
+      color: rgba(255, 255, 255, 0.85);
+      font-family: 'Roboto Condensed', sans-serif;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+      white-space: nowrap;
+      display: inline-block;
+      position: absolute;
+      will-change: transform;
+      animation: desplazarTexto 12s linear infinite;
+      animation-play-state: paused; /* Pausado hasta que inicie la música */
+    }
+
+    @keyframes desplazarTexto {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    #btnStart {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #80182e;
+      color: #ffffff;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 1.3rem;
+      padding: 16px 32px;
+      border: 4px solid #000000;
+      border-radius: 0px;
+      box-shadow: 
+        -4px -4px 0px 0px #ff6688 inset,
+        4px 4px 0px 0px #800020 inset,
+        6px 6px 0px 0px #000000;
       cursor: pointer;
-      transition: transform 0.5s ease, opacity 0.5s ease;
+      z-index: 1000;
+      transition: transform 0.1s ease;
     }
 
-    .carta:nth-child(1) { z-index: 5; transform: translateY(0) rotate(0deg); }
-    .carta:nth-child(2) { z-index: 4; transform: translateY(8px) rotate(-3deg); opacity: 0.98; }
-    .carta:nth-child(3) { z-index: 3; transform: translateY(16px) rotate(3deg); opacity: 0.95; }
-    .carta:nth-child(4) { z-index: 2; transform: translateY(24px) rotate(-2deg); opacity: 0.92; }
-    .carta:nth-child(5) { z-index: 1; transform: translateY(32px) rotate(2deg); opacity: 0.9; }
-
-    .sobre-contenedor {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+    #btnStart:active {
+      transform: translate(-48%, -48%);
+      box-shadow: 2px 2px 0px 0px #000000;
     }
 
-    .sobre-solapa-trasera {
-      position: absolute;
-      top: -14%;
-      left: 0;
-      width: 100%;
-      height: 38%;
-      background-color: #5c1020;
-      clip-path: polygon(0 100%, 50% 0, 100% 100%);
-      border-top-left-radius: 4px;
-      border-top-right-radius: 4px;
+    #btnStart.ocultar {
+      opacity: 0;
+      pointer-events: none;
     }
-
-    .sobre-fondo-interior {
-      position: absolute;
-      top: 12%;
-      left: 0;
-      width: 100%;
-      height: 56%;
-      background-color: #4a0d1a;
-      border-radius: 6px;
-    }
-
-    .tarjeta-papel {
-      position: absolute;
-      top: 3%;
-      left: 6%;
-      width: 88%;
-      height: 75%;
-      background-color: #f5f0eb;
-      color: #1a1a1a;
-      border-radius: 6px;
-      padding: 12px 10px;
-      z-index: 2;
+  
+    .contenedor-desenfocable {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      transition: transform 0.4s ease;
-      overflow-y: auto;
-    }
-
-    .vista-previa-texto {
-      font-family: 'Afacad Flux', 'Stoke', serif;
-      font-size: clamp(0.75rem, 2.2vw, 0.88rem);
-      line-height: 1.35;
-      text-align: left;
-      font-weight: 400;
-      color: #2b2b2b;
-      margin-top: 2px;
       width: 100%;
-      text-shadow: none;
+      transition: filter 0.6s ease;
     }
 
-    .sticker {
-      position: absolute;
-      bottom: 5px;
-      right: 8px;
-      width: clamp(50px, 15vw, 65px);
-      height: auto;
+    .modo-blur {
+      filter: blur(8px);
       pointer-events: none;
     }
 
-    .sobre-frente {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 56%;
-      background-color: #80182e;
-      z-index: 3;
-      clip-path: polygon(0 40%, 50% 0, 100% 40%, 100% 100%, 0 100%);
-      border-bottom-left-radius: 6px;
-      border-bottom-right-radius: 6px;
-    }
-
-    .carta.abierta .tarjeta-papel {
-      transform: translateY(-44%);
-      height: 95%;
-    }
-
-    .btn-seguis {
-      display: none;
-      margin-top: 8px;
-      background-color: #80182e;
-      color: #ffffff;
-      border: none;
-      padding: 6px 14px;
-      font-size: 0.85rem;
-      font-family: 'Roboto Condensed', sans-serif;
-      font-weight: 600;
-      border-radius: 4px;
-      cursor: pointer;
-      letter-spacing: 1px;
-      z-index: 10;
-    }
-
-    .carta.abierta .btn-seguis {
-      display: inline-block;
-    }
-
-    .modal-overlay {
+    .fondo-pantalla {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100lvh;
-      background-color: rgba(0, 0, 0, 0.6);
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    .capa-oscura {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100lvh;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: -1;
+    }
+
+    .contenido-principal {
+      z-index: 1;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 15px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.25s ease, visibility 0.25s ease;
+      max-width: 420px;
+      width: 90vw;
+      margin: auto 0;
+      padding: 20px 0;
     }
 
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .win95-window {
-      width: 100%;
-      max-width: 340px;
-      background-color: #c0c0c0;
-      border-top: 2px solid #dfdfdf;
-      border-left: 2px solid #dfdfdf;
-      border-right: 2px solid #404040;
-      border-bottom: 2px solid #404040;
-      box-shadow: 4px 4px 15px rgba(0,0,0,0.7);
-      font-family: 'MS Sans Serif', Arial, sans-serif;
-      transform: scale(0.95);
-      transition: transform 0.25s ease;
-    }
-
-    .modal-overlay.active .win95-window {
-      transform: scale(1);
-    }
-
-    .win95-titlebar {
-      background: linear-gradient(90deg, #000080, #1084d0);
-      color: white;
-      padding: 4px 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: bold;
-      font-size: 0.85rem;
-    }
-
-    .win95-close-btn {
-      background-color: #c0c0c0;
-      border-top: 1px solid #dfdfdf;
-      border-left: 1px solid #dfdfdf;
-      border-right: 1px solid #404040;
-      border-bottom: 1px solid #404040;
-      color: black;
-      width: 16px;
-      height: 16px;
-      font-size: 10px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .win95-body {
-      padding: 20px 15px;
-      display: flex;
-      gap: 15px;
-      align-items: flex-start;
-      position: relative;
-    }
-
-    .win95-error-icon {
-      width: 32px;
-      height: 32px;
-      background-color: #ff0000;
-      border-radius: 50%;
-      border: 2px solid #8b0000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 20px;
-      font-weight: bold;
-      flex-shrink: 0;
-      box-shadow: inset 1px 1px 2px rgba(255,255,255,0.5);
-    }
-
-    .win95-text {
-      color: #000000;
-      font-size: 0.95rem;
-      line-height: 1.4;
-      font-family: 'Roboto Condensed', sans-serif;
-    }
-
-    .sticker-pataclaun {
-      position: absolute;
-      bottom: 5px;
-      right: 10px;
-      width: 45px;
+    .gif-decorativo {
+      width: clamp(70px, 15vw, 95px);
       height: auto;
-      pointer-events: none;
-      filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+      margin-bottom: 12px;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
     }
 
-    .win95-buttons {
-      padding: 10px 15px 15px;
+    .temporizador {
       display: flex;
+      gap: clamp(8px, 3vw, 18px);
       justify-content: center;
-      gap: 10px;
+      margin-bottom: 25px;
+      width: 100%;
     }
 
-    .win95-btn {
-      background-color: #c0c0c0;
-      border-top: 2px solid #dfdfdf;
-      border-left: 2px solid #dfdfdf;
-      border-right: 2px solid #404040;
-      border-bottom: 2px solid #404040;
-      color: #000000;
-      padding: 6px 20px;
-      font-family: 'Roboto Condensed', sans-serif;
-      font-weight: bold;
-      font-size: 0.9rem;
-      cursor: pointer;
-      min-width: 85px;
-      text-align: center;
+    .bloque-tiempo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 50px;
     }
 
-    .win95-btn:active {
-      border-top: 2px solid #404040;
-      border-left: 2px solid #404040;
-      border-right: 2px solid #dfdfdf;
-      border-bottom: 2px solid #dfdfdf;
-      padding-top: 7px;
-      padding-left: 21px;
+    .numero {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 7vw, 2.6rem);
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .etiqueta {
+      font-size: clamp(0.7rem, 2.2vw, 0.8rem);
+      color: #e0e0e0;
+      text-transform: uppercase;
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
+
+    .contenedor-cita {
+      min-height: 75px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .cita-texto {
+      font-family: 'Stoke', serif;
+      font-size: clamp(0.95rem, 3.4vw, 1.15rem);
+      line-height: 1.5;
+      color: #ffffff;
+      font-weight: 400;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    .definicion-diccionario {
+      margin-top: 10px;
+      text-align: left;
+      width: 100%;
+      padding: 0 10px;
+      opacity: 0.6;
+    }
+
+    .encabezado-palabra {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .palabra-titulo {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.7rem, 6vw, 2.2rem);
+      font-weight: 600;
+      color: #ffffff;
+      line-height: 1;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .fonetica, .categoria {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(0.85rem, 3vw, 0.95rem);
+      color: #e0e0e0;
+      font-style: italic;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+    }
+
+    .texto-definicion {
+      font-family: 'Afacad Flux', sans-serif;
+      font-size: clamp(0.85rem, 3vw, 0.95rem);
+      line-height: 1.5;
+      color: #f0f0f0;
+      font-weight: 400;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
     }
   </style>
 </head>
 <body>
 
-  <a href="index.html" class="boton-regresar" aria-label="Volver">‹</a>
+  <a href="Cartas.html" class="btn-regresar" title="Volver a Cartas">‹</a>
 
-  <h2 class="titulo">Cartas para ti ✨</h2>
-
-  <div class="pila-container" id="pila">
-    
-    <div class="carta" onclick="manejarClicCarta(this, 0)">
-      <div class="sobre-contenedor">
-        <div class="sobre-solapa-trasera"></div>
-        <div class="sobre-fondo-interior"></div>
-        <div class="tarjeta-papel">
-          <p class="vista-previa-texto">Nunca he sido buena expresándome contigo, no sé qué tienes, pero lo tienes... bueno, en realidad sí sé. Te tengo un gran aprecio.</p>
-          <img src="imagenes/cat1.png" alt="Sticker Gatito" class="sticker">
-        </div>
-        <div class="sobre-frente"></div>
-      </div>
-    </div>
-
-    <div class="carta" onclick="manejarClicCarta(this, 1)">
-      <div class="sobre-contenedor">
-        <div class="sobre-solapa-trasera"></div>
-        <div class="sobre-fondo-interior"></div>
-        <div class="tarjeta-papel">
-          <p class="vista-previa-texto">¿Sabes que han pasado 5 años desde que nos conocimos? Me parece increíble cuánto tiempo ha pasado... y sigues siendo tan tú.</p>
-          <img src="imagenes/dog1.png" alt="Sticker Perrito" class="sticker">
-        </div>
-        <div class="sobre-frente"></div>
-      </div>
-    </div>
-
-    <div class="carta" onclick="manejarClicCarta(this, 2)">
-      <div class="sobre-contenedor">
-        <div class="sobre-solapa-trasera"></div>
-        <div class="sobre-fondo-interior"></div>
-        <div class="tarjeta-papel">
-          <p class="vista-previa-texto">Quiero recordarte que eres muy especial para mí. Prácticamente hemos crecido un poquitito juntos y después de todo este tiempo...</p>
-          <img src="imagenes/cat2.png" alt="Sticker Gatito" class="sticker">
-        </div>
-        <div class="sobre-frente"></div>
-      </div>
-    </div>
-
-    <div class="carta" onclick="manejarClicCarta(this, 3)">
-      <div class="sobre-contenedor">
-        <div class="sobre-solapa-trasera"></div>
-        <div class="sobre-fondo-interior"></div>
-        <div class="tarjeta-papel">
-          <p class="vista-previa-texto">Espero que hoy, mañana y siempre te vaya muy bien. Espero que le estés echando ganas a la universidad, pero no te excedas tanto...</p>
-          <img src="imagenes/dog2.png" alt="Sticker Perrito" class="sticker">
-        </div>
-        <div class="sobre-frente"></div>
-      </div>
-    </div>
-
-    <div class="carta" onclick="manejarClicCarta(this, 4)">
-      <div class="sobre-contenedor">
-        <div class="sobre-solapa-trasera"></div>
-        <div class="sobre-fondo-interior"></div>
-        <div class="tarjeta-papel">
-          <p class="vista-previa-texto">Y bueno, hemos llegado al final de estas pequeñas líneas escritas con todo el cariño del mundo. Gracias por llegar hasta aquí...</p>
-          <button class="btn-seguis" onclick="localStorage.setItem('activarMusica', 'true'); window.location.href='temporizador.html';">dale aqui para seguir</button>
-          <img src="imagenes/cat3.png" alt="Sticker Gatito" class="sticker">
-        </div>
-        <div class="sobre-frente"></div>
-      </div>
-    </div>
-
+  <!-- Zona superior en marquesina con el título exacto -->
+  <div class="marquesina-cancion">
+    <div id="infoCancion" class="info-cancion"></div>
   </div>
 
+  <button id="btnStart" onclick="iniciarExperiencia()">START</button>
 
-  <div class="modal-overlay" id="popup-1">
-    <div class="win95-window">
-      <div class="win95-titlebar">
-        <span>System Error</span>
-        <div class="win95-close-btn" onclick="closeAllPopups()">X</div>
-      </div>
-      <div class="win95-body">
-        <div class="win95-error-icon">✕</div>
-        <div class="win95-text">Una última cosa...</div>
-      </div>
-      <div class="win95-buttons">
-        <button class="win95-btn" onclick="openPopup(2)">Continuar</button>
-      </div>
-    </div>
-  </div>
+  <img id="imagenFondo" src="imagenes/f1.jpg" alt="Fondo del día" class="fondo-pantalla">
+  
+  <div class="capa-oscura"></div>
 
-  <div class="modal-overlay" id="popup-2">
-    <div class="win95-window">
-      <div class="win95-titlebar">
-        <span>System Error</span>
-        <div class="win95-close-btn" onclick="closeAllPopups()">X</div>
-      </div>
-      <div class="win95-body">
-        <div class="win95-error-icon">✕</div>
-        <div class="win95-text">He investigado Pataclaun para poder hacerte este detalle.</div>
-      </div>
-      <div class="win95-buttons">
-        <button class="win95-btn" onclick="openPopup(3)">Continuar</button>
-      </div>
-    </div>
-  </div>
+  <div id="contenedorBlur" class="contenedor-desenfocable modo-blur">
+    <div class="contenido-principal">
+      <img src="imagenes/Gif.gif" alt="Gatos animando" class="gif-decorativo">
 
-  <div class="modal-overlay" id="popup-3">
-    <div class="win95-window">
-      <div class="win95-titlebar">
-        <span>System Error</span>
-        <div class="win95-close-btn" onclick="closeAllPopups()">X</div>
+      <div class="temporizador">
+        <div class="bloque-tiempo">
+          <span class="numero" id="dias">00</span>
+          <span class="etiqueta">Días</span>
+        </div>
+        <div class="bloque-tiempo">
+          <span class="numero" id="horas">00</span>
+          <span class="etiqueta">Hs</span>
+        </div>
+        <div class="bloque-tiempo">
+          <span class="numero" id="minutos">00</span>
+          <span class="etiqueta">Min</span>
+        </div>
+        <div class="bloque-tiempo">
+          <span class="numero" id="segundos">00</span>
+          <span class="etiqueta">Seg</span>
+        </div>
       </div>
-      <div class="win95-body">
-        <div class="win95-error-icon">✕</div>
-        <div class="win95-text">No sé quién sigue viendo Pataclaun.<br>No sé por qué lo investigué.<br>No sé qué estoy haciendo con mi vida.<br>Pero ya sé quién es Tony.<br><br>Espero que estés feliz.<br><br>¿Sale un chiste?</div>
-        <img src="imagenes/pataclaun.png" alt="Sticker Pataclaun" class="sticker-pataclaun">
-      </div>
-      <div class="win95-buttons">
-        <button class="win95-btn" onclick="openPopup(4)">Continuar</button>
-      </div>
-    </div>
-  </div>
 
-  <div class="modal-overlay" id="popup-4">
-    <div class="win95-window">
-      <div class="win95-titlebar">
-        <span>System Error</span>
-        <div class="win95-close-btn" onclick="closeAllPopups()">X</div>
+      <div class="contenedor-cita">
+        <p id="citaTexto" class="cita-texto"></p>
       </div>
-      <div class="win95-body">
-        <div class="win95-error-icon">✕</div>
-        <div class="win95-text">¿Quién descubrió América?<br><br><b>Rulito Pinasco.</b><br><br>Gracias por hacerme llegar hasta este punto. 🗿</div>
-      </div>
-      <div class="win95-buttons">
-        <button class="win95-btn" onclick="closeAllPopups()">Cerrar</button>
+
+      <div class="definicion-diccionario">
+        <div class="encabezado-palabra">
+          <span class="palabra-titulo">love:</span>
+          <span class="fonetica">|lŭv|</span>
+          <span class="categoria">- n.</span>
+        </div>
+        <p class="texto-definicion">
+          1. an intense affection for another person based on personal or familial ties 2. the deep tenderness, affection, and concern felt for a person with whom one has a relationship.
+        </p>
       </div>
     </div>
   </div>
 
   <script>
-    const soundCard = new Audio('audio/Card.mp3');
-    const soundPaper = new Audio('audio/paper.mp3');
-    const soundPop = new Audio('audio/pop.wav');
-    const soundAlert = new Audio('audio/Alert.mp3');
-
-    function reproducirAudio(audioObj) {
-      try {
-        audioObj.currentTime = 0;
-        audioObj.play().catch(e => {
-        });
-      } catch (err) {
-        console.log("Error de reproducción:", err);
-      }
-    }
-
-    const textosCompletos = [
-      "Nunca he sido buena expresándome contigo, no sé qué tienes, pero lo tienes... bueno, en realidad sí sé. Te tengo un gran aprecio.<br><br>Aunque te la pases ocupado siempre encuentras momentos para estar conmigo, ¿será que te gustó tanto? Jajaja.<br><br>Sea lo que sea, aprecio muchísimo que aún después de tanto tiempo sigas estando conmigo, y espero poder distraerte aunque sea un poquito de todo con esto. ❤️",
-      
-      "¿Sabes que han pasado 5 años desde que nos conocimos? Me parece increíble cuánto tiempo ha pasado... y sigues siendo tan tú.<br><br>Nunca te he dicho cómo te veo, ¿no?<br><br>Bueno... para mí eres alguien enfocado, centrado, un poquitito terco eso sí jajaja, inteligente, divertido y... un poco lindo. Nunca está de más que alguien te diga algo lindo. 🤭",
-      
-      "Quiero recordarte que eres muy especial para mí.<br><br>Prácticamente hemos crecido un poquitito juntos y después de todo este tiempo quiero seguir conociéndote, seguir compartiendo contigo, si me lo permites.<br><br>Te quiero y en serio no te imaginas cuánto... como unos tres millones y un poquito más, diría yo. Jajaja. ❤️",
-      
-      "Espero que hoy, mañana y siempre te vaya muy bien.<br><br>Espero que le estés echando ganas a la universidad, pero no te excedas tanto. Sé que no eres un niño, pero a veces está bien tomarse un descansito... (si es conmigo, mucho mejor <span>🤭</span>).<br><br>Por cierto, algo que nunca te he dicho es que quisiera verte jugar jajaja.<br><br>Ya, porfa, entiende que me gustas mucho, Ricardo. Te quiero como a nadie. Eres increíble. ❤️",
-      
-      "Y bueno, hemos llegado al final de estas pequeñas líneas escritas con todo el cariño del mundo.<br><br>Gracias por llegar hasta hier. ❤️"
+    // Playlist con tus canciones y su relación exacta con cada archivo SongX
+    const playlist = [
+      { archivo: 'audio/Song1.mp3', titulo: 'Until I Found You', artista: 'Stephen Sanchez' },
+      { archivo: 'audio/Song2.mp3', titulo: 'Love of Your Life', artista: 'Red Hot Chili Peppers' },
+      { archivo: 'audio/Song3.mp3', titulo: 'Hey', artista: 'Red Hot Chili Peppers' },
+      { archivo: 'audio/Song4.mp3', titulo: 'Química Mayor', artista: 'Mon Laferte' },
+      { archivo: 'audio/Song5.mp3', titulo: 'Lovable', artista: 'Kim Jong Kook' },
+      { archivo: 'audio/Song6.mp3', titulo: 'Risk It All', artista: 'Bruno Mars' }
     ];
 
-    const textosVistasPrevias = [
-      "Nunca he sido buena expresándome contigo, no sé qué tienes, pero lo tienes... bueno, en realidad sí sé. Te tengo un gran aprecio.",
-      "¿Sabes que han pasado 5 años desde que nos conocimos? Me parece increíble cuánto tiempo ha pasado... y sigues siendo tan tú.",
-      "Quiero recordarte que eres muy especial para mí. Prácticamente hemos crecido un poquitito juntos y después de todo este tiempo...",
-      "Espero que hoy, mañana y siempre te vaya muy bien. Espero que le estés echando ganas a la universidad, pero no te excedas tanto...",
-      "Y bueno, hemos llegado al final de estas pequeñas líneas escritas con todo el cariño del mundo. Gracias por llegar hasta aquí..."
-    ];
+    let audioActual = null;
 
-    let procesandoAnimacion = false;
+    function reproducirCancionAleatoria() {
+      // Elige un índice al azar entre 0 y 5
+      const randomIndex = Math.floor(Math.random() * playlist.length);
+      const cancionSeleccionada = playlist[randomIndex];
 
-    function manejarClicCarta(elementoCarta, index) {
-      if (procesandoAnimacion) return;
-
-      const pila = document.getElementById('pila');
-      if (elementoCarta !== pila.firstElementChild) return;
-
-      if (elementoCarta.classList.contains('abierta')) {
-        if (index === 3) {
-          openPopup(1);
-        }
-        deslizarYCambiarCarta(elementoCarta, index);
-        return;
+      if (audioActual) {
+        audioActual.pause();
       }
 
-      reproducirAudio(soundPaper);
+      audioActual = new Audio(cancionSeleccionada.archivo);
+      audioActual.volume = 0.6;
 
-      const textoElemento = elementoCarta.querySelector('.vista-previa-texto');
-      textoElemento.innerHTML = textosCompletos[index];
-      elementoCarta.classList.add('abierta');
+      audioActual.play().then(() => {
+        console.log("Reproduciendo al azar:", cancionSeleccionada.titulo);
+      }).catch(e => {
+        console.log("Error al reproducir audio:", e);
+      });
+
+      // Muestra exactamente el título y artista correspondientes a la canción elegida al azar
+      const infoElement = document.getElementById('infoCancion');
+      if (infoElement) {
+        infoElement.innerText = `♫ Reproduciendo: "${cancionSeleccionada.titulo}" — ${cancionSeleccionada.artista}`;
+        infoElement.style.animationPlayState = 'running';
+      }
+
+      // Cuando termine esta canción, vuelve a elegir otra al azar en bucle
+      audioActual.onended = function() {
+        reproducirCancionAleatoria();
+      };
     }
 
-    function deslizarYCambiarCarta(elementoCarta, index) {
-      procesandoAnimacion = true;
+    function iniciarExperiencia() {
+      const contenedor = document.getElementById('contenedorBlur');
+      if (contenedor) {
+        contenedor.classList.remove('modo-blur');
+      }
 
-      reproducirAudio(soundCard);
+      const btn = document.getElementById('btnStart');
+      if (btn) {
+        btn.classList.add('ocultar');
+      }
 
-      elementoCarta.style.transform = 'translate(-150%, 0) rotate(-10deg)';
-      elementoCarta.style.opacity = '0';
-
-      setTimeout(() => {
-        elementoCarta.classList.remove('abierta');
-
-        const textoElemento = elementoCarta.querySelector('.vista-previa-texto');
-        textoElemento.innerHTML = textosVistasPrevias[index];
-
-        const pila = document.getElementById('pila');
-        pila.appendChild(elementoCarta);
-
-        elementoCarta.style.transform = '';
-        elementoCarta.style.opacity = '';
-
-        procesandoAnimacion = false;
-      }, 500);
+      reproducirCancionAleatoria();
     }
 
-    function irASiguientePagina(event) {
-      event.stopPropagation();
-      reproducirAudio(soundPop);
-      setTimeout(() => {
-        window.location.href = 'temporizador.html';
-      }, 200);
+    const frasesFilosoficas = [
+      "Platón — «Amar es desear que el otro alcance aquello que lo hace verdaderamente feliz.»",
+      "Aristóteles — «Amar es querer el bien del otro por el bien del otro.»",
+      "Séneca — «Si quieres ser amado, ama.»",
+      "Epicteto — «El amor también consiste en aprender a aceptar aquello que no podemos poseer.»",
+      "Marco Aurelio — «Acostúmbrate a escuchar lo que dice el otro y, en la medida de lo posible, entra en su alma.»",
+      "Kierkegaard — «El amor es la expresión de la libertad cuando decide entregarse sin dejar de ser ella misma.»",
+      "Nietzsche — «Hay siempre algo de locura en el amor, pero también algo de razón en la locura.»",
+      "Schopenhauer — «El amor es una ilusión mediante la cual la naturaleza asegura la continuidad de la vida.»",
+      "Erich Fromm — «El amor es la única respuesta sensata y satisfactoria al problema de la existencia humana.»",
+      "Simone de Beauvoir — «El amor auténtico debería fundarse en el reconocimiento recíproco de dos libertades.»",
+      "Jean-Paul Sartre — «El amor es un intento de capturar la libertad del otro.»",
+      "Albert Camus — «No ser amado es una simple desgracia; la verdadera desgracia es no amar.»",
+      "Cioran — «El amor es una especie de enfermedad mental.»",
+      "Ortega y Gasset — «El amor es un estado de gracia que se apodera del hombre y lo transforma.»",
+      "Montaigne — «Si me preguntan por qué lo amaba, siento que esto no puede expresarse sino respondiendo: porque era él, porque era yo.»",
+      "Rousseau — «El amor es una pasión que busca la felicidad del ser amado.»",
+      "Pascal — «El corazón tiene razones que la razón no conoce.»",
+      "Spinoza — «El amor es una alegría acompañada por la idea de una causa exterior.»",
+      "Hegel — «El amor es, en general, la conciencia de mi unidad con otro.»",
+      "Schiller — «El amor es la belleza del alma.»",
+      "Voltaire — «El amor es la más fuerte de las pasiones, porque ataca a la vez la cabeza, el corazón y los sentidos.»",
+      "San Agustín — «Ama y haz lo que quieras.»",
+      "Ovidio — «Si quieres ser amado, sé digno de amor.»",
+      "Séneca — «Una de las más bellas cualidades de la verdadera amistad es comprender y ser comprendido.»",
+      "Confucio — «Donde hay amor, hay vida.»",
+      "Tagore — «El amor no reclama posesiones, sino que da libertad.»"
+    ];
+
+    const indiceAleatorio = Math.floor(Math.random() * frasesFilosoficas.length);
+    document.getElementById("citaTexto").innerText = frasesFilosoficas[indiceAleatorio];
+
+    const fondosPorFecha = {
+      "2026-08-26": "imagenes/f1.jpg",
+      "2026-08-27": "imagenes/f1.jpg",
+      "2026-08-28": "imagenes/f2.jpeg",
+      "2026-08-29": "imagenes/f2.jpeg",
+      "2026-08-30": "imagenes/f3.jpeg",
+      "2026-08-31": "imagenes/f3.jpeg",
+      "2026-09-01": "imagenes/f4.jpg",
+      "2026-09-02": "imagenes/f4.jpg",
+      "2026-09-03": "imagenes/f4.jpg",
+      "2026-09-04": "imagenes/f5.jpg",
+      "2026-09-05": "imagenes/f5.jpg",
+      "2026-09-06": "imagenes/f5.jpg",
+      "2026-09-07": "imagenes/f6.jpg",
+      "2026-09-08": "imagenes/f6.jpg"
+    };
+
+    const fechaObjetivo = new Date("2026-09-08T00:00:00").getTime();
+
+    function actualizarTemporizadorYFondo() {
+      const ahora = new Date();
+      const ao = ahora.getFullYear();
+      const mes = String(ahora.getMonth() + 1).padStart(2, '0');
+      const dia = String(ahora.getDate()).padStart(2, '0');
+      const claveHoy = `${ao}-${mes}-${dia}`;
+
+      const fondoHoy = fondosPorFecha[claveHoy] || "imagenes/f1.jpg";
+      const imgElem = document.getElementById("imagenFondo");
+      if (imgElem && imgElem.getAttribute("src") !== fondoHoy) {
+        imgElem.src = fondoHoy;
+      }
+
+      const diferencia = fechaObjetivo - ahora.getTime();
+      if (diferencia <= 0) return;
+
+      const d = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+      document.getElementById("dias").innerText = String(d).padStart(2, '0');
+      document.getElementById("horas").innerText = String(h).padStart(2, '0');
+      document.getElementById("minutos").innerText = String(m).padStart(2, '0');
+      document.getElementById("segundos").innerText = String(s).padStart(2, '0');
     }
 
-    function openPopup(popupNumber) {
-      reproducirAudio(soundAlert);
-
-      document.querySelectorAll('.modal-overlay').forEach(popup => popup.classList.remove('active'));
-      document.getElementById('popup-' + popupNumber).classList.add('active');
-    }
-
-    function closeAllPopups() {
-      reproducirAudio(soundPop);
-      document.querySelectorAll('.modal-overlay').forEach(popup => popup.classList.remove('active'));
-    }
+    setInterval(actualizarTemporizadorYFondo, 1000);
+    actualizarTemporizadorYFondo();
   </script>
 
 </body>
