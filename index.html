@@ -457,7 +457,7 @@ vinylContainer.addEventListener('click',function(){
 // Detectamos el momento exacto del video para mostrar el texto del gatito
 jajaVideo.addEventListener('timeupdate', function(){
   // CAMBIA EL "1.5" por el segundo exacto del video donde aparece el gatito riéndose
-  if(jajaVideo.currentTime >= 0.9 && !jajaText.classList.contains('visible')){
+  if(jajaVideo.currentTime >= 0.8 && !jajaText.classList.contains('visible')){
     jajaText.classList.add('visible');
   }
 });
