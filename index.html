@@ -80,42 +80,60 @@ body{
   text-transform:uppercase;font-weight:300
 }
 
-/* POPUP DE JAJA */
+/* POPUP CONFIGURADO */
 .jaja-overlay{
   position:fixed;inset:0;z-index:9999;
-  background:rgba(0,0,0,.78);
+  background:rgba(0,0,0,.85);
   display:flex;align-items:center;justify-content:center;
   padding:20px;opacity:0;visibility:hidden;pointer-events:none;
-  transition:opacity .5s ease,visibility .5s ease
+  transition:opacity .6s ease,visibility .6s ease
 }
 .jaja-overlay.show{
   opacity:1;visibility:visible;pointer-events:auto
 }
 .jaja-popup{
   width:min(88vw,360px);display:flex;flex-direction:column;
-  align-items:center;opacity:0;transform:scale(.92) translateY(15px);
-  transition:opacity .5s ease,transform .5s ease
+  align-items:center;transform:scale(.92) translateY(15px);
+  transition:transform .5s ease
 }
 .jaja-overlay.show .jaja-popup{
-  opacity:1;transform:scale(1) translateY(0)
+  transform:scale(1) translateY(0)
 }
 #jajaVideo{
   display:block;width:100%;max-height:60vh;object-fit:contain;
   border-radius:3px;background:#000;
-  box-shadow:0 10px 35px rgba(0,0,0,.75)
+  box-shadow:0 10px 35px rgba(0,0,0,.75);
+  transition:opacity .6s ease;
 }
+
 .jaja-text{
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
   margin-top:14px;color:#fff;font-family:'Afacad Flux',sans-serif;
   font-size:1rem;font-weight:400;text-align:center;
   letter-spacing:.5px;text-shadow:0 2px 8px rgba(0,0,0,.8)
 }
+.jaja-text.visible{
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .jaja-button{
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease, background 0.2s ease;
   margin-top:12px;padding:11px 23px;border:0;border-radius:2px;
   background:#581825;color:#fff;
   font-family:'Roboto Condensed',sans-serif;font-size:.9rem;
   font-weight:600;letter-spacing:1.5px;cursor:pointer;
   box-shadow:0 5px 15px rgba(0,0,0,.45);
-  transition:transform .2s ease,background .2s ease
+}
+.jaja-button.visible{
+  display: inline-block;
+  opacity: 1;
+  transform: translateY(0);
 }
 .jaja-button:hover{background:#681c2b;transform:translateY(-2px)}
 .jaja-button:active{transform:scale(.96)}
@@ -220,7 +238,7 @@ body{
 
 </div>
 
-<!-- POPUP NUEVO -->
+<!-- POPUP AJUSTADO -->
 <div class="jaja-overlay" id="jajaOverlay">
 
   <div class="jaja-popup">
@@ -229,10 +247,10 @@ body{
       src="imagenes/Jaja.mp4"
       playsinline preload="auto"></video>
 
-    <div class="jaja-text">eso era todo ❤️</div>
+    <div class="jaja-text" id="jajaText">eso era todo ❤️</div>
 
-    <button class="jaja-button" id="jajaButton" style="display:none;">
-      ahora sí jajaj
+    <button class="jaja-button" id="jajaButton">
+      mentira,ahora sí dale aqui jajaj
     </button>
 
   </div>
@@ -372,9 +390,9 @@ const progressBar=document.getElementById('progressBar');
 const currentTimeEl=document.getElementById('currentTime');
 const remainingTimeEl=document.getElementById('remainingTime');
 
-/* NUEVO */
 const jajaOverlay=document.getElementById('jajaOverlay');
-const jajaVideo=document.getElementById('jajaVideo');
+constajaVideo=document.getElementById('jajaVideo');
+const jajaText=document.getElementById('jajaText');
 const jajaButton=document.getElementById('jajaButton');
 
 loadTextDataOnly(currentIndex);
@@ -405,7 +423,6 @@ function loadTrackData(index){
   loadTextDataOnly(index);
 }
 
-/* AL TOCAR PUPPY: SOLO ABRE JAJA */
 vinylContainer.addEventListener('click',function(){
 
   if(isStarted)return;
@@ -424,7 +441,6 @@ vinylContainer.addEventListener('click',function(){
   setTimeout(()=>{
 
     jajaOverlay.classList.add('show');
-
     jajaVideo.currentTime=0;
 
     jajaVideo.play().catch(e=>{
@@ -438,27 +454,36 @@ vinylContainer.addEventListener('click',function(){
   },800);
 });
 
-/* EL BOTÓN APARECE SOLO CUANDO TERMINA JAJA.MP4 */
-jajaVideo.addEventListener('ended',function(){
-  jajaButton.style.display='inline-block';
+// Detectamos el momento exacto del video para mostrar el texto del gatito
+jajaVideo.addEventListener('timeupdate', function(){
+  // CAMBIA EL "1.5" por el segundo exacto del video donde aparece el gatito riéndose
+  if(jajaVideo.currentTime >= 0.9 && !jajaText.classList.contains('visible')){
+    jajaText.classList.add('visible');
+  }
 });
 
-/* BOTÓN: AHORA SÍ */
-jajaButton.addEventListener('click',function(){
+// Cuando termina el video: solo se desvanece el texto y aparece el botón
+jajaVideo.addEventListener('ended',function(){
+  jajaText.classList.remove('visible'); // Se desvanece el texto del gatito
 
+  setTimeout(() => {
+    // Aparece el botón de mentira para continuar con la música
+    jajaButton.classList.add('visible');
+  }, 500);
+});
+
+// Al hacer clic en el botón, se oculta el popup de Jaja y arranca la música de fondo
+jajaButton.addEventListener('click',function(){
   jajaVideo.pause();
   jajaOverlay.classList.remove('show');
 
   setTimeout(()=>{
-
     loadTrackData(currentIndex);
-
     infoPanel.classList.add('visible');
 
     audioPlayer.play().catch(e=>{
       console.log("Error de reproducción:",e);
     });
-
   },500);
 });
 
