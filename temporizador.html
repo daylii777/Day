@@ -48,7 +48,6 @@
       opacity: 0.8;
     }
 
-    /* Contenedor de la marquesina superior en la zona marcada */
     .marquesina-cancion {
       position: absolute;
       top: 20px;
@@ -198,9 +197,8 @@
       letter-spacing: 1px;
     }
 
-    /* Estilos del botón rojo con letras blancas que aparece al llegar a 0 */
     .btn-rojo-redireccion {
-      display: none; /* Oculto por defecto */
+      display: none; 
       margin-top: 20px;
       background-color: #80182e;
       color: #ffffff;
@@ -345,7 +343,6 @@
   </div>
 
   <script>
-    // Playlist con tus canciones y su relación exacta con cada archivo SongX
     const playlist = [
       { archivo: 'Audio/Song1.mp3', titulo: 'Until I Found You', artista: 'Stephen Sanchez' },
       { archivo: 'Audio/Song2.mp3', titulo: 'Love of Your Life', artista: 'Red Hot Chili Peppers' },
@@ -358,7 +355,6 @@
     let audioActual = null;
 
     function reproducirCancionAleatoria() {
-      // Elige un índice al azar entre 0 y 5
       const randomIndex = Math.floor(Math.random() * playlist.length);
       const cancionSeleccionada = playlist[randomIndex];
 
@@ -375,14 +371,12 @@
         console.log("Error al reproducir audio:", e);
       });
 
-      // Muestra exactamente el título y artista correspondientes a la canción elegida al azar
       const infoElement = document.getElementById('infoCancion');
       if (infoElement) {
         infoElement.innerText = `♫ Reproduciendo: "${cancionSeleccionada.titulo}" — ${cancionSeleccionada.artista}`;
         infoElement.style.animationPlayState = 'running';
       }
 
-      // Cuando termine esta canción, vuelve a elegir otra al azar en bucle
       audioActual.onended = function() {
         reproducirCancionAleatoria();
       };
@@ -475,7 +469,6 @@
         document.getElementById("minutos").innerText = "00";
         document.getElementById("segundos").innerText = "00";
 
-        // Mostrar el botón rojo cuando el tiempo llegue a cero
         if (!eventoActivado) {
           const botonRedireccion = document.getElementById("btnFelizCumple");
           if (botonRedireccion) {
