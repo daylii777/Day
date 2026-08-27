@@ -80,7 +80,7 @@ body{
   text-transform:uppercase;font-weight:300
 }
 
-/* POPUP CONFIGURADO */
+
 .jaja-overlay{
   position:fixed;inset:0;z-index:9999;
   background:rgba(0,0,0,.85);
@@ -238,7 +238,7 @@ body{
 
 </div>
 
-<!-- POPUP AJUSTADO -->
+
 <div class="jaja-overlay" id="jajaOverlay">
 
   <div class="jaja-popup">
@@ -454,25 +454,25 @@ vinylContainer.addEventListener('click',function(){
   },800);
 });
 
-// Detectamos el momento exacto del video para mostrar el texto del gatito
+
 jajaVideo.addEventListener('timeupdate', function(){
-  // CAMBIA EL "1.5" por el segundo exacto del video donde aparece el gatito riéndose
+  
   if(jajaVideo.currentTime >= 0.8 && !jajaText.classList.contains('visible')){
     jajaText.classList.add('visible');
   }
 });
 
-// Cuando termina el video: solo se desvanece el texto y aparece el botón
+
 jajaVideo.addEventListener('ended',function(){
-  jajaText.classList.remove('visible'); // Se desvanece el texto del gatito
+  jajaText.classList.remove('visible'); 
 
   setTimeout(() => {
-    // Aparece el botón de mentira para continuar con la música
+    
     jajaButton.classList.add('visible');
   }, 500);
 });
 
-// Al hacer clic en el botón, se oculta el popup de Jaja y arranca la música de fondo
+
 jajaButton.addEventListener('click',function(){
   jajaVideo.pause();
   jajaOverlay.classList.remove('show');
