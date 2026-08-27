@@ -198,6 +198,33 @@
       letter-spacing: 1px;
     }
 
+    /* Estilos del botón rojo con letras blancas que aparece al llegar a 0 */
+    .btn-rojo-redireccion {
+      display: none; /* Oculto por defecto */
+      margin-top: 20px;
+      background-color: #80182e;
+      color: #ffffff;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.9rem;
+      padding: 14px 24px;
+      border: 3px solid #000000;
+      box-shadow: 4px 4px 0px 0px #000000;
+      cursor: pointer;
+      z-index: 1000;
+      animation: latido 1.5s infinite;
+    }
+
+    .btn-rojo-redireccion:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0px 0px #000000;
+    }
+
+    @keyframes latido {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
     .contenedor-cita {
       min-height: 75px;
       padding: 0 10px;
@@ -263,7 +290,6 @@
 
   <a href="Cartas.html" class="btn-regresar" title="Volver a Cartas">‹</a>
 
-  <!-- Zona superior en marquesina con el título exacto -->
   <div class="marquesina-cancion">
     <div id="infoCancion" class="info-cancion"></div>
   </div>
@@ -296,6 +322,10 @@
           <span class="etiqueta">Seg</span>
         </div>
       </div>
+
+      <button id="btnFelizCumple" class="btn-rojo-redireccion" onclick="window.location.href='felizcumple.html'">
+        ¡Feliz Cumpleaños! 🎉
+      </button>
 
       <div class="contenedor-cita">
         <p id="citaTexto" class="cita-texto"></p>
@@ -422,6 +452,7 @@
     };
 
     const fechaObjetivo = new Date("2026-09-08T00:00:00").getTime();
+    let eventoActivado = false;
 
     function actualizarTemporizadorYFondo() {
       const ahora = new Date();
@@ -437,7 +468,23 @@
       }
 
       const diferencia = fechaObjetivo - ahora.getTime();
-      if (diferencia <= 0) return;
+      
+      if (diferencia <= 0) {
+        document.getElementById("dias").innerText = "00";
+        document.getElementById("horas").innerText = "00";
+        document.getElementById("minutos").innerText = "00";
+        document.getElementById("segundos").innerText = "00";
+
+        // Mostrar el botón rojo cuando el tiempo llegue a cero
+        if (!eventoActivado) {
+          const botonRedireccion = document.getElementById("btnFelizCumple");
+          if (botonRedireccion) {
+            botonRedireccion.style.display = "block";
+          }
+          eventoActivado = true;
+        }
+        return;
+      }
 
       const d = Math.floor(diferencia / (1000 * 60 * 60 * 24));
       const h = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -455,4 +502,5 @@
   </script>
 
 </body>
-</html>
+  </html>
+  
