@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cartas para ti ❤️</title>
   <link href="https://fonts.googleapis.com/css2?family=Italianno&family=Playfair+Display:ital@0;1&family=Roboto+Condensed:wght@400;600&family=Stoke:wght@400&family=Afacad+Flux:wght@300;400;500;600&display=swap" rel="stylesheet">
+
   <style>
     * {
       box-sizing: border-box;
@@ -118,7 +119,14 @@
       background-color: #f5f0eb;
       color: #1a1a1a;
       border-radius: 6px;
-      padding: 12px 10px;
+
+      /*
+        Se reserva espacio abajo y a la derecha para el sticker.
+        Esto evita que el texto pase por debajo del sticker
+        tanto en teléfonos como en computadoras.
+      */
+      padding: 12px 10px clamp(72px, 20%, 105px) 10px;
+
       z-index: 2;
       display: flex;
       flex-direction: column;
@@ -126,6 +134,7 @@
       justify-content: flex-start;
       transition: transform 0.4s ease;
       overflow-y: auto;
+      overflow-x: hidden;
     }
 
     .vista-previa-texto {
@@ -138,15 +147,25 @@
       margin-top: 2px;
       width: 100%;
       text-shadow: none;
+
+      /*
+        Mantiene el texto dentro de una zona segura
+        para que tampoco se meta debajo del sticker.
+      */
+      padding-right: clamp(4px, 2vw, 12px);
+      position: relative;
+      z-index: 5;
     }
 
     .sticker {
       position: absolute;
-      bottom: 5px;
-      right: 8px;
-      width: clamp(50px, 15vw, 65px);
+      bottom: clamp(6px, 2vw, 10px);
+      right: clamp(6px, 2vw, 10px);
+      width: clamp(48px, 15vw, 65px);
+      max-width: 65px;
       height: auto;
       pointer-events: none;
+      z-index: 6;
     }
 
     .sobre-frente {
@@ -165,6 +184,7 @@
     .carta.abierta .tarjeta-papel {
       transform: translateY(-44%);
       height: 95%;
+      padding-bottom: clamp(82px, 22%, 115px);
     }
 
     .btn-seguis {
@@ -181,10 +201,66 @@
       cursor: pointer;
       letter-spacing: 1px;
       z-index: 10;
+      position: relative;
     }
 
     .carta.abierta .btn-seguis {
       display: inline-block;
+    }
+
+    /*
+      Ajustes específicos para pantallas grandes.
+      En computadora la carta tiene más espacio para que
+      el sticker no interfiera con el texto.
+    */
+    @media (min-width: 768px) {
+      .pila-container {
+        width: 290px;
+        height: 320px;
+      }
+
+      .tarjeta-papel {
+        padding: 14px 12px 105px 12px;
+      }
+
+      .carta.abierta .tarjeta-papel {
+        padding-bottom: 115px;
+      }
+
+      .vista-previa-texto {
+        font-size: 0.88rem;
+        line-height: 1.38;
+      }
+
+      .sticker {
+        width: 60px;
+        bottom: 10px;
+        right: 10px;
+      }
+    }
+
+    /*
+      En pantallas muy pequeñas reducimos ligeramente el sticker
+      y mantenemos una zona segura para el texto.
+    */
+    @media (max-width: 360px) {
+      .popup-video {
+        max-height: 200px;
+      }
+
+      .sticker {
+        width: 48px;
+        bottom: 6px;
+        right: 6px;
+      }
+
+      .tarjeta-papel {
+        padding-bottom: 68px;
+      }
+
+      .carta.abierta .tarjeta-papel {
+        padding-bottom: 78px;
+      }
     }
 
     .modal-overlay {
@@ -296,6 +372,33 @@
       filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
     }
 
+    .popup-video-contenedor {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .popup-video {
+      display: block;
+      width: 100%;
+      max-height: 230px;
+      object-fit: contain;
+      background-color: #000000;
+      border: 1px solid #404040;
+    }
+
+    .popup-video-texto {
+      width: 100%;
+      text-align: center;
+      color: #000000;
+      font-family: 'Roboto Condensed', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.2;
+      min-height: 18px;
+    }
+
     .win95-buttons {
       padding: 10px 15px 15px;
       display: flex;
@@ -329,6 +432,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <a href="index.html" class="boton-regresar" aria-label="Volver">‹</a>
@@ -336,15 +440,19 @@
   <h2 class="titulo">Cartas para ti ✨</h2>
 
   <div class="pila-container" id="pila">
-    
+
     <div class="carta" onclick="manejarClicCarta(this, 0)">
       <div class="sobre-contenedor">
         <div class="sobre-solapa-trasera"></div>
         <div class="sobre-fondo-interior"></div>
+
         <div class="tarjeta-papel">
-          <p class="vista-previa-texto">Nunca he sido buena expresándome contigo, no sé qué tienes, pero lo tienes... bueno, en realidad sí sé. Te tengo un gran aprecio.</p>
+          <p class="vista-previa-texto">
+            Nunca he sido buena expresándome contigo, no sé qué tienes, pero lo tienes... bueno, en realidad sí sé. Te tengo un gran aprecio.
+          </p>
           <img src="imagenes/cat1.png" alt="Sticker Gatito" class="sticker">
         </div>
+
         <div class="sobre-frente"></div>
       </div>
     </div>
@@ -353,10 +461,14 @@
       <div class="sobre-contenedor">
         <div class="sobre-solapa-trasera"></div>
         <div class="sobre-fondo-interior"></div>
+
         <div class="tarjeta-papel">
-          <p class="vista-previa-texto">¿Sabes que han pasado 5 años desde que nos conocimos? Me parece increíble cuánto tiempo ha pasado... y sigues siendo tan tú.</p>
+          <p class="vista-previa-texto">
+            ¿Sabes que han pasado 5 años desde que nos conocimos? Me parece increíble cuánto tiempo ha pasado... y sigues siendo tan tú.
+          </p>
           <img src="imagenes/dog1.png" alt="Sticker Perrito" class="sticker">
         </div>
+
         <div class="sobre-frente"></div>
       </div>
     </div>
@@ -365,10 +477,14 @@
       <div class="sobre-contenedor">
         <div class="sobre-solapa-trasera"></div>
         <div class="sobre-fondo-interior"></div>
+
         <div class="tarjeta-papel">
-          <p class="vista-previa-texto">Quiero recordarte que eres muy especial para mí. Prácticamente hemos crecido un poquitito juntos y después de todo este tiempo...</p>
+          <p class="vista-previa-texto">
+            Quiero recordarte que eres muy especial para mí. Prácticamente hemos crecido un poquitito juntos y después de todo este tiempo...
+          </p>
           <img src="imagenes/cat2.png" alt="Sticker Gatito" class="sticker">
         </div>
+
         <div class="sobre-frente"></div>
       </div>
     </div>
@@ -377,10 +493,14 @@
       <div class="sobre-contenedor">
         <div class="sobre-solapa-trasera"></div>
         <div class="sobre-fondo-interior"></div>
+
         <div class="tarjeta-papel">
-          <p class="vista-previa-texto">Espero que hoy, mañana y siempre te vaya muy bien. Espero que le estés echando ganas a la universidad, pero no te excedas tanto...</p>
+          <p class="vista-previa-texto">
+            Espero que hoy, mañana y siempre te vaya muy bien. Espero que le estés echando ganas a la universidad, pero no te excedas tanto...
+          </p>
           <img src="imagenes/dog2.png" alt="Sticker Perrito" class="sticker">
         </div>
+
         <div class="sobre-frente"></div>
       </div>
     </div>
@@ -389,11 +509,22 @@
       <div class="sobre-contenedor">
         <div class="sobre-solapa-trasera"></div>
         <div class="sobre-fondo-interior"></div>
+
         <div class="tarjeta-papel">
-          <p class="vista-previa-texto">Sinceramente, no se me ocurrió nada más para escribirte, perooo...</p>
-          <button class="btn-seguis" onclick="localStorage.setItem('activarMusica', 'true'); window.location.href='temporizador.html';">dale aqui para seguir</button>
+          <p class="vista-previa-texto">
+            Sinceramente, no se me ocurrió nada más para escribirte, perooo...
+          </p>
+
+          <button
+            class="btn-seguis"
+            onclick="event.stopPropagation(); localStorage.setItem('activarMusica', 'true'); window.location.href='temporizador.html';"
+          >
+            dale aqui para seguir
+          </button>
+
           <img src="imagenes/cat3.png" alt="Sticker Gatito" class="sticker">
         </div>
+
         <div class="sobre-frente"></div>
       </div>
     </div>
@@ -407,15 +538,18 @@
         <span>System Error</span>
         <div class="win95-close-btn" onclick="closeAllPopups()">X</div>
       </div>
+
       <div class="win95-body">
         <div class="win95-error-icon">✕</div>
         <div class="win95-text">Una última cosa...</div>
       </div>
+
       <div class="win95-buttons">
         <button class="win95-btn" onclick="openPopup(2)">Continuar</button>
       </div>
     </div>
   </div>
+
 
   <div class="modal-overlay" id="popup-2">
     <div class="win95-window">
@@ -423,15 +557,18 @@
         <span>System Error</span>
         <div class="win95-close-btn" onclick="closeAllPopups()">X</div>
       </div>
+
       <div class="win95-body">
         <div class="win95-error-icon">✕</div>
         <div class="win95-text">He investigado Pataclaun para poder hacerte este detalle.</div>
       </div>
+
       <div class="win95-buttons">
         <button class="win95-btn" onclick="openPopup(3)">Continuar</button>
       </div>
     </div>
   </div>
+
 
   <div class="modal-overlay" id="popup-3">
     <div class="win95-window">
@@ -439,16 +576,30 @@
         <span>System Error</span>
         <div class="win95-close-btn" onclick="closeAllPopups()">X</div>
       </div>
+
       <div class="win95-body">
         <div class="win95-error-icon">✕</div>
-        <div class="win95-text">No sé quién sigue viendo Pataclaun.<br>No sé por qué lo investigué.<br>No sé qué estoy haciendo con mi vida.<br>Pero ya sé quién es Tony.<br><br>Espero que estés feliz.<br><br>¿Sale un chiste?</div>
+
+        <div class="win95-text">
+          No sé quién sigue viendo Pataclaun.<br>
+          No sé por qué lo investigué.<br>
+          No sé qué estoy haciendo con mi vida.<br>
+          Pero ya sé quién es Tony.<br>
+          <br>
+          Espero que estés feliz.<br>
+          <br>
+          ¿Sale un chiste?
+        </div>
+
         <img src="imagenes/pataclaun.png" alt="Sticker Pataclaun" class="sticker-pataclaun">
       </div>
+
       <div class="win95-buttons">
         <button class="win95-btn" onclick="openPopup(4)">Continuar</button>
       </div>
     </div>
   </div>
+
 
   <div class="modal-overlay" id="popup-4">
     <div class="win95-window">
@@ -456,15 +607,28 @@
         <span>System Error</span>
         <div class="win95-close-btn" onclick="closeAllPopups()">X</div>
       </div>
+
       <div class="win95-body">
         <div class="win95-error-icon">✕</div>
-        <div class="win95-text">¿Quién descubrió América?<br><br><b>Rulito Pinasco.</b><br><br>Gracias por hacerme llegar hasta este punto. 🗿</div>
+
+        <div class="popup-video-contenedor">
+          <video
+            class="popup-video"
+            src="imagenes/claun.mp4"
+            controls
+            playsinline
+            preload="metadata"
+          ></video>
+          <div class="popup-video-texto">xd?</div>
+        </div>
       </div>
+
       <div class="win95-buttons">
         <button class="win95-btn" onclick="closeAllPopups()">Cerrar</button>
       </div>
     </div>
   </div>
+
 
   <script>
     const soundCard = new Audio('Audio/Card.mp3');
@@ -475,8 +639,7 @@
     function reproducirAudio(audioObj) {
       try {
         audioObj.currentTime = 0;
-        audioObj.play().catch(e => {
-        });
+        audioObj.play().catch(e => {});
       } catch (err) {
         console.log("Error de reproducción:", err);
       }
@@ -484,22 +647,26 @@
 
     const textosCompletos = [
       "Nunca he sido buena expresándome contigo, no sé qué tienes, pero lo tienes... bueno, en realidad sí sé. Te tengo un gran aprecio.<br><br>Aunque te la pases ocupado siempre encuentras momentos para estar conmigo, ¿será que te gustó tanto? Jajaja.<br><br>Sea lo que sea, aprecio muchísimo que aún después de tanto tiempo sigas estando conmigo, y espero poder distraerte aunque sea un poquito de todo con esto. ❤️",
-      
+
       "¿Sabes que han pasado 5 años desde que nos conocimos? Me parece increíble cuánto tiempo ha pasado... y sigues siendo tan tú.<br><br>Nunca te he dicho cómo te veo, ¿no?<br><br>Bueno... para mí eres alguien enfocado, centrado, un poquitito terco eso sí jajaja, inteligente, divertido y... un poco lindo. Nunca está de más que alguien te diga algo lindo. 🤭",
-      
+
       "Quiero recordarte que eres muy especial para mí.<br><br>Prácticamente hemos crecido un poquitito juntos y después de todo este tiempo quiero seguir conociéndote, seguir compartiendo contigo, si me lo permites.<br><br>Te quiero y en serio no te imaginas cuánto... como unos tres millones y un poquito más, diría yo. Jajaja. ❤️",
-      
+
       "Espero que hoy, mañana y siempre te vaya muy bien.<br><br>Espero que le estés echando ganas a la universidad, pero no te excedas tanto. Sé que no eres un niño, pero a veces está bien tomarse un descansito... (si es conmigo, mucho mejor <span>🤭</span>).<br><br>Por cierto, algo que nunca te he dicho es que quisiera verte jugar jajaja.<br><br>Ya, porfa, entiende que me gustas mucho, Ricardo. Te quiero como a nadie. Eres increíble. ❤️",
-      
-      "Sinceramente, no se me ocurrió nada más para escribirte, perooo... considera que son casi 5 cartas: 5 cartas por los 5 años que tendría de conocerte.<br><br>Qué detallazo, ¿no? (Para nada planeado).❤️"
+
+      "Sinceramente, no se me ocurrió nada más para escribirte, perooo... considera que son casi 5 cartas, 5 cartas por los 5 años que tendría de conocerte. <br><br>Qué detallazo, ¿no? (Para nada planeado). 😼❤️"
     ];
 
     const textosVistasPrevias = [
       "Nunca he sido buena expresándome contigo, no sé qué tienes, pero lo tienes... bueno, en realidad sí sé. Te tengo un gran aprecio.",
+
       "¿Sabes que han pasado 5 años desde que nos conocimos? Me parece increíble cuánto tiempo ha pasado... y sigues siendo tan tú.",
+
       "Quiero recordarte que eres muy especial para mí. Prácticamente hemos crecido un poquitito juntos y después de todo este tiempo...",
+
       "Espero que hoy, mañana y siempre te vaya muy bien. Espero que le estés echando ganas a la universidad, pero no te excedas tanto...",
-      "Y bueno, hemos llegado al final de estas pequeñas líneas escritas con todo el cariño del mundo. Gracias por llegar hasta aquí..."
+
+      "Sinceramente, no se me ocurrió nada más para escribirte, perooo..."
     ];
 
     let procesandoAnimacion = false;
@@ -508,12 +675,14 @@
       if (procesandoAnimacion) return;
 
       const pila = document.getElementById('pila');
+
       if (elementoCarta !== pila.firstElementChild) return;
 
       if (elementoCarta.classList.contains('abierta')) {
         if (index === 3) {
           openPopup(1);
         }
+
         deslizarYCambiarCarta(elementoCarta, index);
         return;
       }
@@ -521,7 +690,9 @@
       reproducirAudio(soundPaper);
 
       const textoElemento = elementoCarta.querySelector('.vista-previa-texto');
-      textoElemento.innerHTML = textosCompletos[index];
+
+         textoElemento.innerHTML = textosCompletos[index];
+
       elementoCarta.classList.add('abierta');
     }
 
@@ -537,9 +708,11 @@
         elementoCarta.classList.remove('abierta');
 
         const textoElemento = elementoCarta.querySelector('.vista-previa-texto');
+
         textoElemento.innerHTML = textosVistasPrevias[index];
 
         const pila = document.getElementById('pila');
+
         pila.appendChild(elementoCarta);
 
         elementoCarta.style.transform = '';
@@ -551,7 +724,9 @@
 
     function irASiguientePagina(event) {
       event.stopPropagation();
+
       reproducirAudio(soundPop);
+
       setTimeout(() => {
         window.location.href = 'temporizador.html';
       }, 200);
@@ -560,16 +735,21 @@
     function openPopup(popupNumber) {
       reproducirAudio(soundAlert);
 
-      document.querySelectorAll('.modal-overlay').forEach(popup => popup.classList.remove('active'));
+      document.querySelectorAll('.modal-overlay').forEach(popup => {
+        popup.classList.remove('active');
+      });
+
       document.getElementById('popup-' + popupNumber).classList.add('active');
     }
 
     function closeAllPopups() {
       reproducirAudio(soundPop);
-      document.querySelectorAll('.modal-overlay').forEach(popup => popup.classList.remove('active'));
+
+      document.querySelectorAll('.modal-overlay').forEach(popup => {
+        popup.classList.remove('active');
+      });
     }
   </script>
 
 </body>
-  </html>
-  
+</html>
