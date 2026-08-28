@@ -244,10 +244,6 @@
       y mantenemos una zona segura para el texto.
     */
     @media (max-width: 360px) {
-      .popup-video {
-        max-height: 200px;
-      }
-
       .sticker {
         width: 48px;
         bottom: 6px;
@@ -383,19 +379,19 @@
     .popup-video {
       display: block;
       width: 100%;
+      max-width: 100%;
       max-height: 230px;
       object-fit: contain;
-      background-color: #000000;
+      background-color: #000;
       border: 1px solid #404040;
     }
 
     .popup-video-texto {
       width: 100%;
       text-align: center;
-      color: #000000;
+      color: #000;
       font-family: 'Roboto Condensed', sans-serif;
       font-size: 0.95rem;
-      line-height: 1.2;
       min-height: 18px;
     }
 
@@ -611,15 +607,12 @@
       <div class="win95-body">
         <div class="win95-error-icon">✕</div>
 
-        <div class="popup-video-contenedor">
-          <video
-            class="popup-video"
-            src="imagenes/claun.mp4"
-            controls
-            playsinline
-            preload="metadata"
-          ></video>
-          <div class="popup-video-texto">xd?</div>
+        <div class="win95-text">
+          ¿Quién descubrió América?
+          <br><br>
+          <b>Rulito Pinasco.</b>
+          <br><br>
+          Gracias por hacerme llegar hasta este punto. 🗿
         </div>
       </div>
 
@@ -635,6 +628,7 @@
     const soundPaper = new Audio('Audio/paper.mp3');
     const soundPop = new Audio('Audio/pop.wav');
     const soundAlert = new Audio('Audio/Alert.mp3');
+    const claunVideo = document.getElementById('claunVideo');
 
     function reproducirAudio(audioObj) {
       try {
@@ -691,7 +685,7 @@
 
       const textoElemento = elementoCarta.querySelector('.vista-previa-texto');
 
-         textoElemento.innerHTML = textosCompletos[index];
+      textoElemento.innerHTML = textosCompletos[index];
 
       elementoCarta.classList.add('abierta');
     }
@@ -740,6 +734,13 @@
       });
 
       document.getElementById('popup-' + popupNumber).classList.add('active');
+
+      if (popupNumber === 4 && claunVideo) {
+        claunVideo.currentTime = 0;
+        claunVideo.play().catch(error => {
+          console.log('Autoplay con audio bloqueado por el navegador:', error);
+        });
+      }
     }
 
     function closeAllPopups() {
